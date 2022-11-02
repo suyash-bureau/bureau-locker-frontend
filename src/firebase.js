@@ -22,6 +22,9 @@ export const googleSignIn = async () => {
 			const credential = GoogleAuthProvider.credentialFromResult(result);
 			const token = credential.accessToken;
 			const user = result.user;
+			localStorage.setItem('User', JSON.stringify(user.email));
+			localStorage.setItem('token', token);
+			window.location.href = 'http://localhost:3000/environment';
 		})
 
 		.catch((error) => {

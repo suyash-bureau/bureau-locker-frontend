@@ -1,5 +1,4 @@
 /** @format */
-
 import { Button, Flex, Heading, Stack, Image, Text } from '@chakra-ui/react';
 import { googleSignIn } from '../firebase';
 
@@ -9,7 +8,7 @@ export default function AppLanding() {
 			<Flex p={8} flex={1} align={'center'} justify={'center'} direction='column'>
 				<Heading>Bureau Locker </Heading>
 				<Text textAlign='left' mb='40' color='gray.500' fontWeight='medium' mt='2'>
-					Easily rotate, manage and retrieve secrets throughout their lifecycle
+					Easily create new secrets throughout their lifecycle.
 				</Text>
 				<Stack spacing={4} w={'full'} maxW={'md'}>
 					<Stack spacing={6}>

@@ -5,10 +5,13 @@ import { Flex, Box, Text, Radio, RadioGroup, Stack, Button, Select } from '@chak
 
 export const Environment = () => {
 	const [data, setData] = useState<any>();
-	const [loading, setLoading] = useState(true);
+	const [selectedValue, setSelectedValue] = useState();
+
+	const handleChange = (e) => {
+		setSelectedValue(e.value);
+	};
 
 	const handleClick = async () => {
-		setLoading(true);
 		try {
 			const response = await fetch('http://localhost:8080/list', {
 				method: 'GET',
@@ -17,12 +20,12 @@ export const Environment = () => {
 				},
 			}).then((r) => r.json());
 			setData(response);
-			setLoading(false);
 		} catch (error) {
 			console.log(error);
-			setLoading(false);
 		}
 	};
+
+	console.log(selectedValue);
 
 	return (
 		<Flex height='100vh'>
@@ -64,8 +67,6 @@ export const Environment = () => {
 							<RadioGroup>
 								<Stack direction='row' gap={6}>
 									<Radio value='1'>Development</Radio>
-									{/* <Radio value='2'>Staging</Radio>
-									<Radio value='3'>Production</Radio> */}
 								</Stack>
 							</RadioGroup>
 						</Flex>
@@ -75,7 +76,7 @@ export const Environment = () => {
 					</Button>
 					<Flex>
 						{data && (
-							<Select mt='6'>
+							<Select mt='6' onChange={handleChange}>
 								{data &&
 									data.response.SecretList.map((item: any) => {
 										return <option>{item.Name}</option>;
