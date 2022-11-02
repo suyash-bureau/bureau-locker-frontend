@@ -8,7 +8,7 @@ export default function AppLanding() {
 			<Flex p={8} flex={1} align={'center'} justify={'center'} direction='column'>
 				<Heading>Bureau Locker </Heading>
 				<Text textAlign='left' mb='40' color='gray.500' fontWeight='medium' mt='2'>
-					Easily create new secrets throughout their lifecycle.
+					A no-fuss application to create AWS secrets in all environments.
 				</Text>
 				<Stack spacing={4} w={'full'} maxW={'md'}>
 					<Stack spacing={6}>

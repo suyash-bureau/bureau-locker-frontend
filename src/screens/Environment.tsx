@@ -1,18 +1,44 @@
 /** @format */
 
-import React, { useState } from 'react';
-import { Flex, Box, Text, Radio, RadioGroup, Stack, Button, Select } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import {
+	Flex,
+	Box,
+	Text,
+	Radio,
+	RadioGroup,
+	Stack,
+	Button,
+	Select,
+	FormControl,
+	FormLabel,
+	FormErrorMessage,
+	FormHelperText,
+	Input,
+} from '@chakra-ui/react';
 
 export const Environment = () => {
 	const [data, setData] = useState<any>();
 	const [selectedValue, setSelectedValue] = useState();
+	const [loading, setLoading] = useState(true);
+	const [secretKey, setSecretKey] = useState('');
+	const [secretValue, setSecretValue] = useState('');
+	const [items, setItems] = useState('');
 
-	const handleChange = (e) => {
-		setSelectedValue(e.value);
+	useEffect(() => {
+		const items = JSON.parse(localStorage.getItem('User') as any);
+		if (items) {
+			setItems(items);
+		}
+	}, []);
+
+	const handleChange = (e: any) => {
+		setSelectedValue(e.target.value);
 	};
 
 	const handleClick = async () => {
 		try {
+			setLoading(true);
 			const response = await fetch('http://localhost:8080/list', {
 				method: 'GET',
 				headers: {
@@ -20,12 +46,37 @@ export const Environment = () => {
 				},
 			}).then((r) => r.json());
 			setData(response);
+			setLoading(false);
+		} catch (error) {
+			console.log(error);
+			setLoading(false);
+		}
+	};
+
+	const formData = {
+		name: selectedValue,
+		key: secretKey,
+		value: secretValue,
+		user: items,
+	};
+
+	const handleSubmitClick = async () => {
+		try {
+			var header = new Headers({
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Methods': '*',
+			});
+
+			const response = await fetch('http://192.168.4.188:8080/create', {
+				method: 'OPTIONS',
+				headers: header,
+				body: JSON.stringify(formData),
+			}).then((r) => r.json());
+			setData(response);
 		} catch (error) {
 			console.log(error);
 		}
 	};
-
-	console.log(selectedValue);
 
 	return (
 		<Flex height='100vh'>
@@ -79,9 +130,38 @@ export const Environment = () => {
 							<Select mt='6' onChange={handleChange}>
 								{data &&
 									data.response.SecretList.map((item: any) => {
-										return <option>{item.Name}</option>;
+										return (
+											<option key={item.Name} value={item.Name} selected={item.Name}>
+												{item.Name}
+											</option>
+										);
 									})}
 							</Select>
+						)}
+					</Flex>
+					<Flex>
+						{selectedValue && (
+							<Flex mt='6' direction='column' borderTop='1px solid #464a53' w='full'>
+								<Text fontSize='2xl' mt='6' mb='6'>
+									Add Secrets
+								</Text>
+								<Flex gap={4}>
+									<FormControl mb='4'>
+										<FormLabel>Secret Key</FormLabel>
+										<Input type='email' onChange={(e) => setSecretKey(e.target.value)} />
+									</FormControl>
+
+									<FormControl>
+										<FormLabel>Secret Value</FormLabel>
+										<Input type='email' onChange={(e) => setSecretValue(e.target.value)} />
+									</FormControl>
+								</Flex>
+								<Flex justify='center' mt='3'>
+									<Button colorScheme='blue' w='fit-content' onClick={handleSubmitClick}>
+										Add Secrets
+									</Button>
+								</Flex>
+							</Flex>
 						)}
 					</Flex>
 				</Box>
