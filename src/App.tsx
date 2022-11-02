@@ -1,10 +1,10 @@
 /** @format */
 
 import React from 'react';
-import AppLanding from './screens/AppLanding';
+import { AppRoutes } from './AppRoutes';
 
 function App() {
-	return <AppLanding />;
+	return <AppRoutes />;
 }
 
 export default App;
